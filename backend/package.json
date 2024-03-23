@@ -1,0 +1,29 @@
+{
+  "name": "@plottlab/backend",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@aws-sdk/s3-request-presigner": "^3.523.0",
+    "@trpc/server": "^10.0.0-proxy-beta.13",
+    "aws-sdk": "^2.1185.0",
+    "axios": "^1.1.3",
+    "mercadopago": "^2.0.8",
+    "uuid": "^8.3.2",
+    "zod": "^3.18.0"
+  },
+  "devDependencies": {
+    "@trpc/client": "^10.0.0-proxy-beta.12",
+    "@types/aws-lambda": "^8.10.101",
+    "@types/fuzzyset": "^1.0.4",
+    "@types/uuid": "^8.3.4",
+    "@types/ws": "^8.5.3",
+    "node-fetch": "^3.2.10",
+    "ws": "^8.9.0"
+  },
+  "author": "",
+  "license": "ISC"
+}

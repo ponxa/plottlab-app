@@ -1,0 +1,6 @@
+
+# Abrir terminal en /sharp
+
+docker build --build-arg NODE_VERSION=14 -t sharp-layer-image .
+
+docker run --mount type=bind,source=C:/Users/may_r/desktop/wecraft/wecraft-microservices/services/assets-microservice/src/layers/sharp,target=/out sharp-layer-image /out/package.zip .

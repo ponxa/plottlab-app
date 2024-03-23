@@ -1,0 +1,20 @@
+{
+  "extends": "../tsconfig.json",
+  "include": [
+    "core",
+    "functions",
+    "../.sst/types",
+    "core/assets/api/api.ts",
+    "core/assets/api/api.ts"
+  ],
+  "compilerOptions": {
+    "module": "esnext",
+    "target": "es2017",
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": ".",
+    "paths": {
+      "@plottlab/backend/core/*": ["./core/*"]
+    }
+  }
+}

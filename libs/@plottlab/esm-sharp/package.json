@@ -1,0 +1,22 @@
+{
+  "name": "@plottlab/esm-sharp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.mjs",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "types": "./index.d.ts",
+  "dependencies": {
+    "@types/sharp": "^0.31.0",
+    "mlly": "^1.0.0",
+    "sharp": "^0.31.0"
+  },
+  "exports": {
+    "import": "./index.mjs"
+  },
+  "sideEffects": false
+}

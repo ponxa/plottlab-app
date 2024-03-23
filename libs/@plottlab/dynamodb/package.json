@@ -1,0 +1,16 @@
+{
+  "name": "@plottlab/dynamodb",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "3.257.0",
+    "@aws-sdk/lib-dynamodb": "3.257.0"
+  },
+  "sideEffects": false,
+  "author": "",
+  "license": "ISC"
+}

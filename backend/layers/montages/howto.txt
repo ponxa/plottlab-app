@@ -1,0 +1,6 @@
+
+# Abrir terminal en /montages
+
+docker build --build-arg PYTHON_VERSION=3.7 -t requirements-layer-image .
+
+docker run --mount type=bind,source=C:/Users/luism/Desktop/wecraft/wecraft-microservices/_sst/backend/layers/montages,target=/out requirements-layer-image /out/package.zip .
