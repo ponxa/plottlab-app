@@ -8,6 +8,7 @@ import * as addToCart from '../routers/addToCart';
 import * as addCustomer from '../routers/addCustomer';
 import * as geyPaymentLink from '../routers/geyPaymentLink';
 import * as makeThumbnails from '../routers/makeThumbnails';
+import * as addToPreCart from '../routers/addToPreCart';
 
 // this object is not actually used - we just use it to combine the two servers
 const combinedRouter = t.router({
@@ -19,6 +20,7 @@ const combinedRouter = t.router({
   addCustomer: addCustomer.router,
   geyPaymentLink: geyPaymentLink.router,
   makeThumbnails: makeThumbnails.router,
+  addToPreCart: addToPreCart.router,
   // ...otherRouters
 });
 

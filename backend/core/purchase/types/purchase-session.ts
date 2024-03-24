@@ -4,15 +4,21 @@ import { PlotterMontagesSchema } from '@plottlab/backend/core/assets/types/monta
 
 export const purchaseSessionSchema = z.object({
   sessionId: z.string(),
-  preCart: z
-    .array(
-      z.object({
-        imagesForMontage: z.array(z.string()),
-        thumbnailImagesForMontage: z.array(z.string()),
-        status: z.enum(['pending', 'completed']),
+  preCart: z.object({
+    imagesForMontage: z
+      .object({
+        rawSizeUrl: z.string(),
+        versionsCount: z.number(),
       })
-    )
-    .optional(),
+      .array(),
+    thumbnailImagesForMontage: z
+      .object({
+        thumbnailUrl: z.string(),
+        versionsCount: z.number(),
+      })
+      .array(),
+    status: z.enum(['pending', 'completed']),
+  }),
   cart: z
     .array(
       z.object({

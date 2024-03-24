@@ -1,6 +1,6 @@
 import type { CombinedRouter } from './combined-routers';
 import type { HTTPHeaders } from '@trpc/client';
-import { createTRPCProxyClient, httpBatchLink, httpLink } from '@trpc/client';
+import { createTRPCProxyClient, httpLink } from '@trpc/client';
 
 export const endpoints = [
   'makeMontage',
@@ -11,6 +11,7 @@ export const endpoints = [
   'addCustomer',
   'geyPaymentLink',
   'makeThumbnails',
+  'addToPreCart',
   // ...otherRouters
 ] as const;
 // const apiUrl =

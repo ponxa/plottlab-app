@@ -26,7 +26,8 @@
   "dependencies": {
     "@aws-sdk/s3-request-presigner": "^3.523.0",
     "@plottlab/backend": "^1.0.0",
-    "jsonwebtoken": "^9.0.2"
+    "jsonwebtoken": "^9.0.2",
+    "sharp": "^0.33.3"
   },
   "author": "",
   "license": "ISC",

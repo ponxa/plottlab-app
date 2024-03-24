@@ -33,14 +33,9 @@ export async function createSnapshot(snap: PurchaseSession) {
 }
 
 export async function createPaymentLinkAndSaveSnapshot(snap: PurchaseSession) {
-  console.log('snap', snap);
-  try {
-    const snapShot = await createSnapshot(snap);
-    const paymentLink = await createPaymentLink(snapShot);
-    return { ...snapShot, paymentLink };
-  } catch (error) {
-    console.log('Error creating payment link', error);
-  }
+  const snapShot = await createSnapshot(snap);
+  const paymentLink = await createPaymentLink(snapShot);
+  return { ...snapShot, paymentLink };
 }
 
 export async function markSnapShotAsPaid(snapId: string) {

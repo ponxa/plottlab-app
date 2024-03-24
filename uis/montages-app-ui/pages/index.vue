@@ -11,10 +11,11 @@ import { usePurchase } from '~/store/purchase';
 import type { Purchase } from '~/store/purchase';
 
 type Montages = TRPCOutput<'createMontages'>;
+type Images = TRPCOutput<'makeThumbnails'>;
 const Purchase = usePurchase();
 const Montages = useMontages();
 
-const images = ref<string[]>([]);
+const images = ref<Images[]>([]);
 
 const loading = ref(false);
 
@@ -42,7 +43,7 @@ const handleFiles = async (event: HTMLInputElement) => {
 
     const s3Url = s3Uploadurl.split('?')[0];
 
-    images.value.push(s3Url);
+    await Purchase.addToPreCart(s3Url);
   });
 };
 
@@ -94,7 +95,6 @@ async function addToCart() {
   await Purchase.addToCart(totalMeter, totalPrice);
   router.push('/checkout');
 }
-console.log('purchase', usePurchase().purchase);
 </script>
 
 <template>
@@ -109,11 +109,16 @@ console.log('purchase', usePurchase().purchase);
       />
       <div class="grid">
         <div
-          v-for="(image, index) in images"
+          v-for="(image, index) in Purchase.purchase.preCart
+            .thumbnailImagesForMontage"
           :key="index"
           class="image-container"
         >
-          <img :src="image" :alt="'Image ' + index" class="image" />
+          <img
+            :src="image.thumbnailUrl"
+            :alt="'Image ' + index"
+            class="image"
+          />
           <button @click="discardImage(index)" class="remove-button">x</button>
         </div>
       </div>

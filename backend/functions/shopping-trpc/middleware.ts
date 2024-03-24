@@ -13,21 +13,20 @@ const jwtPayloadSchema = z.object({
 
 function parseSessionId(headers: APIGatewayProxyEventV2['headers']) {
   // get JWT Token from header
-  console.log('Headers', headers);
+
   const authHeader = headers.authorization || undefined;
   if (!authHeader) return undefined;
 
   if (!authHeader.startsWith('Bearer ')) throw new Error('Invalid JWT Token');
 
   const sessionToken = authHeader.replace('Bearer ', '');
-  console.log('Session Token', sessionToken);
+
   // Decode if present
   try {
     const payload = jwtPayloadSchema.parse(
       jwt.verify(sessionToken, PLOTTLAB_SESSION_JWT_SECRET)
     );
 
-    console.log('Decoded JWT Token', payload);
     return payload.purchaseSessionId;
   } catch (error) {
     throw new Error('Invalid JWT Token');
@@ -53,9 +52,7 @@ export async function createContext({
   try {
     const purchaseSession = await PurchaseSession.getOrCreate(purchaseId);
     return { purchaseSession, requestData };
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 }
 
 export type PurchaseContext = Awaited<ReturnType<typeof createContext>>;

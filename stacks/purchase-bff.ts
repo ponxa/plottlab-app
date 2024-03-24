@@ -80,6 +80,14 @@ export function PlottsPurchaseBffStack({ stack, app }: StackContext) {
           layers: [use(PlottsAssetsStack).sharpLayer],
         },
       },
+      'POST /trpc/addToPreCart/{proxy+}': {
+        function: {
+          handler:
+            'backend/functions/shopping-trpc/routers/addToPreCart.handler',
+          timeout: 30,
+          layers: [use(PlottsAssetsStack).sharpLayer],
+        },
+      },
     },
   });
   // Show the API endpoint in output

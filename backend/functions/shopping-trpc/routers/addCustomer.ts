@@ -13,14 +13,11 @@ const procedure = t.procedure.input(schema).mutation(async ({ input, ctx }) => {
   // const { sessionId, updatedAt, cart } = input;
   const { customer } = input;
 
-  console.log('input', input);
   try {
     await PurchaseSession.updateCustomers(
       ctx.purchaseSession.sessionId,
       customer
     );
-  } catch (error) {
-    console.log('error', error);
-  }
+  } catch (error) {}
 });
 export const { handler, router } = makeTRPCHandler(procedure);

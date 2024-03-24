@@ -8,6 +8,11 @@ export const usePurchase = defineStore('purchase', {
     purchase: {
       sessionId: '',
       userId: '',
+      preCart: {
+        imagesForMontage: [],
+        thumbnailImagesForMontage: [],
+        status: 'pending',
+      },
       cart: [
         {
           montages: {
@@ -40,7 +45,13 @@ export const usePurchase = defineStore('purchase', {
         .addToCart({
           cart: [{ montages, TotalMeters, TotalPrice }],
         });
-      console.log('purchase', purchase);
+
+      this.purchase = purchase;
+    },
+
+    async addToPreCart(image: string) {
+      const purchase = await useNuxtApp().$trpcAPI().addToPreCart(image);
+
       this.purchase = purchase;
     },
   },

@@ -7,3 +7,5 @@ export const updatePurchaseSession = PurchaseSession.update;
 export const updateCart = PurchaseSession.updateCart;
 
 export const updateCustomers = PurchaseSession.updateCustomer;
+
+export const updatePreCart = PurchaseSession.updatePreCart;

@@ -66,7 +66,6 @@ export async function createPaymentLink(snapshot: SnapShot) {
     successUrl: `localhost:3000/success`,
   });
   const response = await preference.create(buildedPreferences);
-  console.log(response);
 
   return response.init_point;
 }

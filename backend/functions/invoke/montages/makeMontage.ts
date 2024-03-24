@@ -73,7 +73,6 @@ type LambdaInvokeEvent = { body: unknown };
 export async function handler(
   event: LambdaInvokeEvent
 ): Promise<APIGatewayProxyResultV2> {
-  console.log('Event:', event);
   const body = schema.parse(event.body);
 
   const { creationDate, images, widthInCm } = body;

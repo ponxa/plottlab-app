@@ -5,14 +5,13 @@ export const PlotterMontagesSchema = z.object({
   montagesUrls: z.array(
     z.object({
       url: z.string(),
-      versionId: z.string(),
     })
   ),
   createdAt: z.string(),
   thumbnailsUrls: z.array(
     z.object({
       url: z.string(),
-      versionId: z.string(),
+
       realDimensions: z.object({
         width: z.number(),
         height: z.number(),

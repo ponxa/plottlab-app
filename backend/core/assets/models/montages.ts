@@ -83,19 +83,29 @@ async function saveRawSizeToS3(url: string) {
     versionId,
     dataUrl
   );
-  return { rawSizeUrl, versionId };
+  return { rawSizeUrl };
 }
 
 export async function makeThumbnailFromUrlAndSaveToS3(url: string) {
-  const thumbnail = await makeThumbnail(url, 'jpeg', 1000);
-  const rawSizeimage = await saveRawSizeToS3(url);
-  const [width, height] = await getDimsFromAnyUrl(url);
+  const versionId = uuid();
+  const thumbnailPromise = makeThumbnail(url, 'jpeg', 1000);
+  const rawSizeImagePromise = saveRawSizeToS3(url);
+
+  const [thumbnail, rawSizeImage] = await Promise.all([
+    thumbnailPromise,
+    rawSizeImagePromise,
+  ]);
+
   const dataUrl = await dataUrlFromUrl(thumbnail);
   const thumbnailUrl = await saveImageToS3(
     bucketName,
     `plotts/thumbnails`,
-    uuid(),
+    versionId,
     dataUrl
   );
-  return { rawSizeimage, thumbnailUrl, realDimensions: { width, height } };
+
+  return {
+    rawSizeImage,
+    thumbnailUrl,
+  };
 }
