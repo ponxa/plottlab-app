@@ -8,8 +8,15 @@ import { v4 as uuid } from 'uuid';
 
 const schema = z.string();
 
+//* this function transform from pixels to cms
+const pixelsToCms = (pixels: number, dpi: number) => {
+  return (pixels / dpi) * 2.54;
+};
+
 const procedure = t.procedure.input(schema).mutation(async ({ input, ctx }) => {
-  const { rawSizeImage, thumbnailUrl } = await Assets.makeThumbnail(input);
+  const { rawSizeImage, thumbnailUrl, dimsInPx } = await Assets.makeThumbnail(
+    input
+  );
   const { sessionId } = ctx.purchaseSession;
 
   const imageId = uuid();
@@ -27,6 +34,11 @@ const procedure = t.procedure.input(schema).mutation(async ({ input, ctx }) => {
         thumbnailUrl: thumbnailUrl,
         copies: 1,
         id: imageId,
+        dimsInPx: dimsInPx,
+        dimsInCms: {
+          width: pixelsToCms(dimsInPx.width, 150),
+          height: pixelsToCms(dimsInPx.height, 150),
+        },
       },
     ],
     status: 'pending',

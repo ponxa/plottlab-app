@@ -1,5 +1,6 @@
 import type { TRPCOutput } from '../plugins/trpc-api';
 import { useMontages } from './montages';
+import axios from 'axios';
 
 export type Purchase = TRPCOutput<'getPurchaseSession'>;
 
@@ -49,10 +50,27 @@ export const usePurchase = defineStore('purchase', {
       this.purchase = purchase;
     },
 
-    async addToPreCart(image: string) {
-      const purchase = await useNuxtApp().$trpcAPI().addToPreCart(image);
+    async addToPreCart(files: File[]) {
+      const eventFiles = Array.from(files) as File[];
 
-      this.purchase = purchase;
+      eventFiles.forEach(async (image) => {
+        const filename = image?.name;
+        const contentType = image?.type;
+        const s3Uploadurl = await useNuxtApp().$trpcAPI().getShortLifeUrl({
+          filename,
+          contentType,
+        });
+
+        await axios.put(s3Uploadurl, image, {
+          headers: {
+            'Content-Type': contentType,
+          },
+        });
+
+        const s3Url = s3Uploadurl.split('?')[0];
+        const purchase = await useNuxtApp().$trpcAPI().addToPreCart(s3Url);
+        this.purchase = purchase;
+      });
     },
     async removeImg(imageId: string) {
       try {

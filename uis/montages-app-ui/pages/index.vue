@@ -25,38 +25,34 @@ const handleFiles = async (event: HTMLInputElement) => {
   if (!event.files) return;
   if (event.files.length === 0) return;
 
-  const eventFiles = Array.from(event.files) as File[];
-
-  eventFiles.forEach(async (image) => {
-    const filename = image?.name;
-    const contentType = image?.type;
-    const s3Uploadurl = await useNuxtApp().$trpcAPI().getShortLifeUrl({
-      filename,
-      contentType,
-    });
-
-    await axios.put(s3Uploadurl, image, {
-      headers: {
-        'Content-Type': contentType,
-      },
-    });
-
-    const s3Url = s3Uploadurl.split('?')[0];
-
-    await Purchase.addToPreCart(s3Url);
-  });
+  await Purchase.addToPreCart(event.files);
 };
 
 const discardImage = (index: number) => {
   images.value.splice(index, 1);
 };
 
+function flattenArray(imageObjects) {
+  const flattenedArray: string[] = [];
+  console.log('imageObjects', imageObjects);
+
+  // Iterate through each object in the array
+  imageObjects.forEach((obj) => {
+    // Add copies of imgUrl based on the 'copies' property
+    for (let i = 0; i < obj.copies; i++) {
+      flattenedArray.push(obj.rawSizeUrl);
+    }
+  });
+
+  return flattenedArray;
+}
+
 const makePlottable = async () => {
   loading.value = true;
-
+  const images = flattenArray(Purchase.purchase.preCart.imagesForMontage);
   const pollingUrl = await useNuxtApp()
     .$trpcAPI()
-    .makeMontage({ images: images.value });
+    .makeMontage({ images: images });
 
   const s3MontagesUrls = await pollMontageUrls(pollingUrl);
   const { montageUrls } = await Montages.saveMontages(s3MontagesUrls);
@@ -123,6 +119,8 @@ async function addToCart() {
           :image="image.thumbnailUrl"
           :copies="image.copies"
           :imageId="image.id"
+          :dimsInPx="image.dimsInPx"
+          :dimsInCms="image.dimsInCms"
         />
       </div>
     </div>

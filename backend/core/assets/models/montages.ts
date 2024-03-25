@@ -90,6 +90,7 @@ export async function makeThumbnailFromUrlAndSaveToS3(url: string) {
   const versionId = uuid();
   const thumbnailPromise = makeThumbnail(url, 'jpeg', 1000);
   const rawSizeImagePromise = saveRawSizeToS3(url);
+  const [width, height] = await getDimsFromAnyUrl(url);
 
   const [thumbnail, rawSizeImage] = await Promise.all([
     thumbnailPromise,
@@ -107,5 +108,6 @@ export async function makeThumbnailFromUrlAndSaveToS3(url: string) {
   return {
     rawSizeImage,
     thumbnailUrl,
+    dimsInPx: { width, height },
   };
 }

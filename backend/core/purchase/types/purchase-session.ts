@@ -17,6 +17,8 @@ export const purchaseSessionSchema = z.object({
         thumbnailUrl: z.string(),
         copies: z.number(),
         id: z.string(),
+        dimsInPx: z.object({ width: z.number(), height: z.number() }),
+        dimsInCms: z.object({ width: z.number(), height: z.number() }),
       })
       .array(),
     status: z.enum(['pending', 'completed']),
