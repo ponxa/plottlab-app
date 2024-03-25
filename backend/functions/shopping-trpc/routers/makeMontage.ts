@@ -31,22 +31,6 @@ async function signedUrl(Bucket: string, Key: string) {
   return await getSignedUrl(s3Client, command);
 }
 
-async function pollMontageUrls(pollingUrl: string) {
-  async function pollingLoop() {
-    let response;
-    try {
-      response = await axios.get(pollingUrl);
-      return response.data;
-    } catch (error) {
-      if (error.isAxiosError) {
-        await new Promise((resolve) => setTimeout(resolve, 5000));
-        return await pollingLoop();
-      } else throw error;
-    }
-  }
-  const { montageUrls } = await pollingLoop();
-  return montageUrls;
-}
 const schema = z.object({
   images: z.array(z.string()),
 });
@@ -69,18 +53,7 @@ const procedure = t.procedure
       widthInCm: 167,
     });
 
-    // Poll for the montages
-    // const montageUrls = await pollMontageUrls(pollingUrl);
-
     return pollingUrl;
-
-    // // Store the montages in the database
-    // try {
-    //   return await Assets.savePlotts(montageUrls);
-    // } catch (error) {
-    //   console.error('Error saving montages to database', error);
-    //   throw new Error('Error saving montages to database');
-    // }
   });
 
 export const { handler, router } = makeTRPCHandler(procedure);

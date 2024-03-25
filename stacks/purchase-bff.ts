@@ -88,6 +88,20 @@ export function PlottsPurchaseBffStack({ stack, app }: StackContext) {
           layers: [use(PlottsAssetsStack).sharpLayer],
         },
       },
+
+      'POST /trpc/removeImg/{proxy+}': {
+        function: {
+          handler: 'backend/functions/shopping-trpc/routers/removeImg.handler',
+          timeout: 30,
+        },
+      },
+      'POST /trpc/updateImgCopies/{proxy+}': {
+        function: {
+          handler:
+            'backend/functions/shopping-trpc/routers/updateImgCopies.handler',
+          timeout: 30,
+        },
+      },
     },
   });
   // Show the API endpoint in output

@@ -9,3 +9,7 @@ export const updateCart = PurchaseSession.updateCart;
 export const updateCustomers = PurchaseSession.updateCustomer;
 
 export const updatePreCart = PurchaseSession.updatePreCart;
+
+export const removeImg = PurchaseSession.removeImgFromPrecart;
+
+export const updateImgCopies = PurchaseSession.updateImgCopies;

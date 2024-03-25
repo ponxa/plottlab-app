@@ -8,13 +8,15 @@ export const purchaseSessionSchema = z.object({
     imagesForMontage: z
       .object({
         rawSizeUrl: z.string(),
-        versionsCount: z.number(),
+        copies: z.number(),
+        id: z.string(),
       })
       .array(),
     thumbnailImagesForMontage: z
       .object({
         thumbnailUrl: z.string(),
-        versionsCount: z.number(),
+        copies: z.number(),
+        id: z.string(),
       })
       .array(),
     status: z.enum(['pending', 'completed']),

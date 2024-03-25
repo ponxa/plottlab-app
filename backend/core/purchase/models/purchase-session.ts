@@ -70,21 +70,6 @@ export const updatePreCart = async (
 ) => {
   const session = await db.get(sessionId);
 
-  //   imagesForMontage: [
-  //     {
-  //       rawSizeUrl: 'https://my-plottlab-mixlab-plottm-plottmontagesbucketa2061-9cx6xnsib5ut.s3.sa-east-1.amazonaws.com/plotts/rawSizes/01e32b54-54ca-4972-a9c2-5e1169c9f9bd.jpeg',
-  //       versionsCount: 1
-  //     }
-  //   ],
-  //   thumbnailImagesForMontage: [
-  //     {
-  //       thumbnailUrl: 'https://my-plottlab-mixlab-plottm-plottmontagesbucketa2061-9cx6xnsib5ut.s3.sa-east-1.amazonaws.com/plotts/thumbnails/3a52884d-714c-42b5-b747-fea72d633651.jpeg',
-  //       versionsCount: 1
-  //     }
-  //   ],
-  //   status: 'pending'
-  // }
-
   session.preCart = {
     imagesForMontage: session.preCart.imagesForMontage.concat(
       preCart.imagesForMontage
@@ -108,5 +93,47 @@ export const updateCustomer = async (
   const session = await db.get(sessionId);
   session.customer = customer;
   session.updatedAt = new Date().toISOString();
+  return await update(session);
+};
+
+export const removeImgFromPrecart = async (
+  sessionId: string,
+  imageId: string
+) => {
+  const session = await db.get(sessionId);
+
+  session.preCart.imagesForMontage = session.preCart.imagesForMontage.filter(
+    (img) => img.id !== imageId
+  );
+  session.preCart.thumbnailImagesForMontage =
+    session.preCart.thumbnailImagesForMontage.filter(
+      (img) => img.id !== imageId
+    );
+
+  session.updatedAt = new Date().toISOString();
+  return await update(session);
+};
+
+export const updateImgCopies = async (
+  sessionId: string,
+  imageId: string,
+  copies: number
+) => {
+  const session = await db.get(sessionId);
+
+  const image = session.preCart.imagesForMontage.find(
+    (img) => img.id === imageId
+  );
+  const thumbnailImage = session.preCart.thumbnailImagesForMontage.find(
+    (img) => img.id === imageId
+  );
+
+  if (image && thumbnailImage) {
+    image.copies = copies;
+    thumbnailImage.copies = copies;
+  }
+
+  session.updatedAt = new Date().toISOString();
+
   return await update(session);
 };

@@ -12,6 +12,8 @@ export const endpoints = [
   'geyPaymentLink',
   'makeThumbnails',
   'addToPreCart',
+  'removeImg',
+  'updateImgCopies',
   // ...otherRouters
 ] as const;
 // const apiUrl =

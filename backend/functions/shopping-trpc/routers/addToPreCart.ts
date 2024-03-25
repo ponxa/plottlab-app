@@ -4,23 +4,29 @@ import type { PurchaseSession } from '@plottlab/backend/core/purchase/types/purc
 import { makeTRPCHandler, t } from '../factory';
 import { z } from 'zod';
 
+import { v4 as uuid } from 'uuid';
+
 const schema = z.string();
 
 const procedure = t.procedure.input(schema).mutation(async ({ input, ctx }) => {
   const { rawSizeImage, thumbnailUrl } = await Assets.makeThumbnail(input);
   const { sessionId } = ctx.purchaseSession;
 
+  const imageId = uuid();
+
   let preCart: PurchaseSession['preCart'] = {
     imagesForMontage: [
       {
         rawSizeUrl: rawSizeImage.rawSizeUrl,
-        versionsCount: 1,
+        copies: 1,
+        id: imageId,
       },
     ],
     thumbnailImagesForMontage: [
       {
         thumbnailUrl: thumbnailUrl,
-        versionsCount: 1,
+        copies: 1,
+        id: imageId,
       },
     ],
     status: 'pending',

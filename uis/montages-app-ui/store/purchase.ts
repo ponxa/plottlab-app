@@ -54,5 +54,27 @@ export const usePurchase = defineStore('purchase', {
 
       this.purchase = purchase;
     },
+    async removeImg(imageId: string) {
+      try {
+        const purchase = await useNuxtApp().$trpcAPI().removeImg({ imageId });
+        console.log('purchase', purchase);
+
+        this.purchase = purchase;
+      } catch (error) {
+        console.log('error', error);
+      }
+    },
+    async addOrRemoveImg(imageId: string, copies: number) {
+      try {
+        const purchase = await useNuxtApp()
+          .$trpcAPI()
+          .updateImgCopies({ imageId, copies });
+        console.log('purchase', purchase);
+
+        this.purchase = purchase;
+      } catch (error) {
+        console.log('error', error);
+      }
+    },
   },
 });

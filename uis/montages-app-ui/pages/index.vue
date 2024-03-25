@@ -100,7 +100,14 @@ async function addToCart() {
 <template>
   <article class="page-container">
     <div class="container">
-      <h1>Welcome!</h1>
+      <h1 class="title">Plottlab Montages Creator</h1>
+      <p class="description">
+        Welcome to Plottlab Montages Creator. This application allows you to
+        upload your images and create beautiful montages. Once your montage is
+        ready, you can have it plotted and delivered to your doorstep. Start
+        creating your unique montage now!
+      </p>
+
       <input
         type="file"
         multiple
@@ -108,19 +115,15 @@ async function addToCart() {
         accept="images/*"
       />
       <div class="grid">
-        <div
+        <ImageCard
           v-for="(image, index) in Purchase.purchase.preCart
             .thumbnailImagesForMontage"
           :key="index"
           class="image-container"
-        >
-          <img
-            :src="image.thumbnailUrl"
-            :alt="'Image ' + index"
-            class="image"
-          />
-          <button @click="discardImage(index)" class="remove-button">x</button>
-        </div>
+          :image="image.thumbnailUrl"
+          :copies="image.copies"
+          :imageId="image.id"
+        />
       </div>
     </div>
     <button @click="makePlottable" class="plott-button" v-if="!loading">
@@ -168,23 +171,11 @@ async function addToCart() {
   object-fit: cover;
 }
 
-.remove-button {
+/* .remove-button {
   position: absolute;
-  top: -0.5rem;
-  right: -0.5rem;
-  border-radius: 50%;
-  background-color: var(--pico-primary);
-  width: 1.2rem;
-  height: 1.2rem;
-  color: #fff;
-  text-align: center;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 0rem;
-  padding: 0 0 0.2rem 0;
-  font-weight: 600;
-}
+  top: 0;
+  right: 0;
+} */
 
 .plott-button {
   margin-top: 1rem;
