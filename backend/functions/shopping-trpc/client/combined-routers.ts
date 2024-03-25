@@ -11,6 +11,7 @@ import * as makeThumbnails from '../routers/makeThumbnails';
 import * as addToPreCart from '../routers/addToPreCart';
 import * as removeImg from '../routers/removeImg';
 import * as updateImgCopies from '../routers/updateImgCopies';
+import * as updateGeneratedMontages from '../routers/updateGeneratedMontages';
 
 // this object is not actually used - we just use it to combine the two servers
 const combinedRouter = t.router({
@@ -25,6 +26,7 @@ const combinedRouter = t.router({
   addToPreCart: addToPreCart.router,
   removeImg: removeImg.router,
   updateImgCopies: updateImgCopies.router,
+  updateGeneratedMontages: updateGeneratedMontages.router,
   // ...otherRouters
 });
 

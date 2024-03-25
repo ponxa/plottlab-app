@@ -19,3 +19,17 @@ export function pixelsToMeters(pixels: number, dpi: number = 150): number {
   const meters = inches * inchToMeter;
   return meters;
 }
+
+export function asDayMonthDate(date) {
+  // Recibe Date o ISOString
+  // Devuelve "28 de Abril" por ejemplo
+  if (typeof date === 'string') date = parseISOString(date);
+
+  return date
+    ? date.toLocaleDateString('es-ES', {
+        timeZone: 'UTC',
+        day: 'numeric',
+        month: 'long',
+      })
+    : null;
+}

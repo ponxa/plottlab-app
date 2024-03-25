@@ -102,6 +102,13 @@ export function PlottsPurchaseBffStack({ stack, app }: StackContext) {
           timeout: 30,
         },
       },
+      'POST /trpc/updateGeneratedMontages/{proxy+}': {
+        function: {
+          handler:
+            'backend/functions/shopping-trpc/routers/updateGeneratedMontages.handler',
+          timeout: 30,
+        },
+      },
     },
   });
   // Show the API endpoint in output

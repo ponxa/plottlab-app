@@ -21,6 +21,15 @@ export const purchaseSessionSchema = z.object({
         dimsInCms: z.object({ width: z.number(), height: z.number() }),
       })
       .array(),
+    generatedMontages: PlotterMontagesSchema.extend({
+      totalPrice: z.number(),
+      totalMeters: z.number(),
+      pricePerMeter: z.number().default(5000),
+      pickUpDays: z.number().default(2),
+    })
+      .omit({ id: true, createdAt: true })
+      .optional(),
+
     status: z.enum(['pending', 'completed']),
   }),
   cart: z
@@ -40,6 +49,7 @@ export const purchaseSessionSchema = z.object({
   shipping: z.object({}).optional(),
   customer: z
     .object({
+      companyName: z.string(),
       firstName: z.string(),
       lastName: z.string(),
       email: z.string(),
@@ -50,3 +60,5 @@ export const purchaseSessionSchema = z.object({
 });
 
 export type PurchaseSession = z.infer<typeof purchaseSessionSchema>;
+
+export type PlotterMontages = z.infer<typeof PlotterMontagesSchema>;

@@ -6,6 +6,7 @@ import { Table } from 'sst/node/table';
 import {
   PurchaseSession,
   purchaseSessionSchema,
+  PlotterMontages,
 } from '../types/purchase-session';
 
 //* Indexes
@@ -31,6 +32,14 @@ export const create = async (sessionId: string) => {
       imagesForMontage: [],
       thumbnailImagesForMontage: [],
       status: 'pending',
+      generatedMontages: {
+        montagesUrls: [],
+        thumbnailsUrls: [],
+        totalPrice: 0,
+        totalMeters: 0,
+        pricePerMeter: 5000,
+        pickUpDays: 2,
+      },
     },
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -49,7 +58,12 @@ export const getOrCreate = async (sessionId: string) => {
   try {
     return await db.get(sessionId);
   } catch (error) {
-    return await create(sessionId);
+    console.log('Error getting new session', error);
+    try {
+      return await create(sessionId);
+    } catch (error) {
+      console.log('Error Creating new session', error);
+    }
   }
 };
 
@@ -78,6 +92,7 @@ export const updatePreCart = async (
       preCart.thumbnailImagesForMontage
     ),
     status: preCart.status,
+    generatedMontages: session.preCart.generatedMontages,
   };
 
   session.updatedAt = new Date().toISOString();
@@ -134,6 +149,40 @@ export const updateImgCopies = async (
   }
 
   session.updatedAt = new Date().toISOString();
+
+  return await update(session);
+};
+
+export const updateGeneratedMontages = async (
+  sessionId: string,
+  generatedMontages: PlotterMontages
+) => {
+  const session = await db.get(sessionId);
+
+  const pixelsToMeters = (pixels: number, dpi: number) => {
+    return (pixels / dpi) * 0.0254;
+  };
+  const roundToCentecima = (meters: number) => {
+    return Math.round(meters * 100) / 100;
+  };
+  const totalPrice =
+    generatedMontages.thumbnailsUrls
+      .map((i) => pixelsToMeters(i.realDimensions.height, 150))
+      .reduce((a, b) => a + b) *
+    session.preCart.generatedMontages.pricePerMeter;
+
+  session.preCart.generatedMontages = {
+    ...generatedMontages,
+    totalPrice: Math.ceil(totalPrice / 100) * 100,
+    totalMeters: roundToCentecima(
+      generatedMontages.thumbnailsUrls
+        .map((i) => pixelsToMeters(i.realDimensions.height, 150))
+        .reduce((a, b) => a + b)
+    ),
+
+    pricePerMeter: session.preCart.generatedMontages.pricePerMeter,
+    pickUpDays: session.preCart.generatedMontages.pickUpDays,
+  };
 
   return await update(session);
 };

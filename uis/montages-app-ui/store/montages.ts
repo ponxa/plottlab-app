@@ -17,6 +17,9 @@ export const useMontages = defineStore('montages', {
       thumbnailsUrls: [],
     },
   }),
+  getters: {
+    isMontageGenerated: (state) => state.montages.montagesUrls.length > 0,
+  },
   actions: {
     async saveMontages(images: string[]) {
       const montages = await useNuxtApp().$trpcAPI().createMontages(images);
@@ -25,16 +28,9 @@ export const useMontages = defineStore('montages', {
       return montages;
     },
 
-    async MakeMontages(strings: stringÑ[]) {
-      console.log('preCart', preCart);
-      try {
-        const montages = await useNuxtApp().$trpcAPI().makeMontage({ images });
-        return montages;
-
-        console.log('images', images);
-      } catch (error) {
-        console.log('error', error);
-      }
+    async MakeMontages(images: string[]) {
+      const montages = await useNuxtApp().$trpcAPI().makeMontage({ images });
+      return montages;
     },
   },
 });

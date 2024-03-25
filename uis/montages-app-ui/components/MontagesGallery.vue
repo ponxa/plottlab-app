@@ -1,53 +1,107 @@
 <script lang="ts" setup>
-import { asCurrency, pixelsToMeters } from '../lib/utils';
-import type { Montages } from '../store/montages';
+import { asCurrency } from '../lib/utils';
+import { usePurchase } from '../store/purchase';
+import { asDayMonthDate, pixelsToMeters } from '../lib/utils';
 
-const props = defineProps({
-  montagesThumnails: {
-    type: Array,
-    default: [],
-  },
-});
+const Purchase = usePurchase();
+const router = useRouter();
+async function addToCart() {
+  router.push('/checkout');
+}
 
-const { montagesThumnails } = toRefs(props);
+const calculateDeliveryDate = () => {
+  const today = new Date();
+  const deliveryDate = new Date();
+  deliveryDate.setDate(
+    today.getDate() + Purchase.purchase.preCart.generatedMontages.pickUpDays
+  );
+  return asDayMonthDate(deliveryDate);
+};
 
-const parsedMontages = computed(() => {
-  return montagesThumnails.value.map((montage) => ({
-    src: montage.url,
-    alt: `montage thumbnail image`,
-    price: asCurrency(pixelsToMeters(montage.realDimensions.height) * PRICE),
-    largeInMeters: Math.ceil(pixelsToMeters(montage.realDimensions.height)),
-  }));
-});
-
-const PRICE = 5000;
+const rountToTwoDecimals = (num: number) => {
+  return Math.round((num + Number.EPSILON) * 100) / 100;
+};
 </script>
 <template>
+  <header>
+    <h1>Galeria De Montages Generados</h1>
+    <p>Aquí están los montajes que has creado.</p>
+  </header>
   <article class="gallery">
     <div
-      v-for="(image, index) in parsedMontages"
+      v-for="(image, index) in Purchase.purchase.preCart.generatedMontages
+        .thumbnailsUrls"
       :key="index"
       class="image-container"
     >
-      <img :src="image.src" :alt="image.alt" />
+      <img :src="image.url" alt="Montage Image" />
       <div>
         <small>
-          {{ image.largeInMeters }}m
-          <br />
-          {{ image.price }}
+          Largo en metro del montaje:
+          <strong
+            >{{
+              rountToTwoDecimals(pixelsToMeters(image.realDimensions.height))
+            }}m</strong
+          >
         </small>
       </div>
     </div>
+
+    <!-- Total price of montage showed in a view , how many meter of montage have you generated and in how many days can you pick it up -->
+
+    <div class="description">
+      <p>
+        Precio total:
+        <strong>{{
+          asCurrency(Purchase.purchase.preCart.generatedMontages.totalPrice)
+        }}</strong>
+        <br />
+        <small class="small-custom">
+          (*Precio por metro:
+          <strong>{{
+            asCurrency(
+              Purchase.purchase.preCart.generatedMontages.pricePerMeter
+            )
+          }}</strong
+          >)
+        </small>
+      </p>
+      <p>
+        Metros totales:
+        <strong
+          >{{
+            Purchase.purchase.preCart.generatedMontages.totalMeters
+          }}m</strong
+        >
+      </p>
+      <p>
+        Paga ahora y retira el
+        <strong style="font-weight: 500">{{ calculateDeliveryDate() }}</strong>
+      </p>
+    </div>
   </article>
+  <div class="center">
+    <button @click="addToCart()">
+      Agendar impresión por
+      <strong>{{
+        asCurrency(Purchase.purchase.preCart.generatedMontages.totalPrice)
+      }}</strong>
+    </button>
+  </div>
 </template>
 
 <style scoped>
-small {
-  font-weight: bold;
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1rem;
 }
+
 .gallery {
   display: flex;
   overflow-x: auto;
+  justify-content: space-between;
 }
 
 .image-container {
@@ -56,8 +110,18 @@ small {
 }
 
 .image-container img {
-  max-height: 300px; /* Adjust as needed */
+  max-width: 500px; /* Adjust as needed */
   object-fit: cover;
   border: 0.5px solid #000;
+}
+
+.description {
+  margin-top: 1rem;
+  border-left: 3px solid #000;
+  padding-left: 1rem;
+}
+.small-custom {
+  margin: 0;
+  font-weight: 400;
 }
 </style>

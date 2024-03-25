@@ -14,6 +14,7 @@ export const endpoints = [
   'addToPreCart',
   'removeImg',
   'updateImgCopies',
+  'updateGeneratedMontages',
   // ...otherRouters
 ] as const;
 // const apiUrl =

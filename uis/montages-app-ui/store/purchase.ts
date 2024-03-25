@@ -33,6 +33,12 @@ export const usePurchase = defineStore('purchase', {
       status: '',
     },
   }),
+  getters: {
+    isFileSelected: (state) =>
+      state.purchase.preCart.imagesForMontage.length > 0,
+    isMontageGenerated: (state) =>
+      state.purchase.preCart.generatedMontages.montagesUrls.length > 0,
+  },
   actions: {
     initPurchaseSession(purchase: Purchase) {
       this.purchase = purchase;
@@ -73,26 +79,23 @@ export const usePurchase = defineStore('purchase', {
       });
     },
     async removeImg(imageId: string) {
-      try {
-        const purchase = await useNuxtApp().$trpcAPI().removeImg({ imageId });
-        console.log('purchase', purchase);
+      const purchase = await useNuxtApp().$trpcAPI().removeImg({ imageId });
 
-        this.purchase = purchase;
-      } catch (error) {
-        console.log('error', error);
-      }
+      this.purchase = purchase;
     },
     async addOrRemoveImg(imageId: string, copies: number) {
-      try {
-        const purchase = await useNuxtApp()
-          .$trpcAPI()
-          .updateImgCopies({ imageId, copies });
-        console.log('purchase', purchase);
+      const purchase = await useNuxtApp()
+        .$trpcAPI()
+        .updateImgCopies({ imageId, copies });
 
-        this.purchase = purchase;
-      } catch (error) {
-        console.log('error', error);
-      }
+      this.purchase = purchase;
+    },
+    async updateGeneratedMontages(montages) {
+      const purchase = await useNuxtApp()
+        .$trpcAPI()
+        .updateGeneratedMontages(montages);
+
+      this.purchase = purchase;
     },
   },
 });

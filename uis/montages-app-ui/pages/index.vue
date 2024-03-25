@@ -3,8 +3,6 @@ import { ref } from 'vue';
 import type { TRPCOutput } from '../plugins/trpc-api';
 import axios from 'axios';
 
-import { pixelsToMeters } from '../lib/utils';
-
 import { useMontages } from '~/store/montages';
 
 import { usePurchase } from '~/store/purchase';
@@ -15,8 +13,6 @@ type Images = TRPCOutput<'makeThumbnails'>;
 const Purchase = usePurchase();
 const Montages = useMontages();
 
-const images = ref<Images[]>([]);
-
 const loading = ref(false);
 
 const handleFiles = async (event: HTMLInputElement) => {
@@ -25,16 +21,13 @@ const handleFiles = async (event: HTMLInputElement) => {
   if (!event.files) return;
   if (event.files.length === 0) return;
 
-  await Purchase.addToPreCart(event.files);
-};
+  const files = Array.from(event.files) as File[];
 
-const discardImage = (index: number) => {
-  images.value.splice(index, 1);
+  await Purchase.addToPreCart(files);
 };
 
 function flattenArray(imageObjects) {
   const flattenedArray: string[] = [];
-  console.log('imageObjects', imageObjects);
 
   // Iterate through each object in the array
   imageObjects.forEach((obj) => {
@@ -57,11 +50,9 @@ const makePlottable = async () => {
   const s3MontagesUrls = await pollMontageUrls(pollingUrl);
   const { montageUrls } = await Montages.saveMontages(s3MontagesUrls);
 
-  montages.value = montageUrls.thumbnailsUrls;
   loading.value = false;
+  await Purchase.updateGeneratedMontages(montageUrls);
 };
-
-const montages = ref<Montages['montageUrls']['thumbnailsUrls']>([]);
 
 async function pollMontageUrls(pollingUrl: string) {
   async function pollingLoop() {
@@ -81,27 +72,17 @@ async function pollMontageUrls(pollingUrl: string) {
 }
 
 const router = useRouter();
-
-async function addToCart() {
-  const totalMeter = montages.value.reduce((acc, montage) => {
-    return acc + pixelsToMeters(montage.realDimensions.height);
-  }, 0);
-  const totalPrice = totalMeter * 5000;
-
-  await Purchase.addToCart(totalMeter, totalPrice);
-  router.push('/checkout');
-}
 </script>
 
 <template>
-  <article class="page-container">
+  <article class="page-container" v-if="!Purchase.isMontageGenerated">
     <div class="container">
       <h1 class="title">Plottlab Montages Creator</h1>
       <p class="description">
-        Welcome to Plottlab Montages Creator. This application allows you to
-        upload your images and create beautiful montages. Once your montage is
-        ready, you can have it plotted and delivered to your doorstep. Start
-        creating your unique montage now!
+        Bienvenido al Creador de Montajes de Plottlab. Esta aplicación te
+        permite subir tus imágenes y crear hermosos montajes. Una vez que tu
+        montaje esté listo, puedes mandarlo a plotear y te lo entregaremos en tu
+        puerta. ¡Comienza a crear tu montaje único ahora mismo!
       </p>
 
       <input
@@ -124,25 +105,24 @@ async function addToCart() {
         />
       </div>
     </div>
-    <button @click="makePlottable" class="plott-button" v-if="!loading">
-      Create Plott
+    <button
+      @click="makePlottable"
+      class="plott-button"
+      v-if="!loading"
+      :disabled="!Purchase.isFileSelected"
+    >
+      Cotizar
     </button>
-    <progress v-else />
+    <div v-else>
+      <p>Optimizando ubicación de imágenes, generando montaje final</p>
+      <progress />
+    </div>
   </article>
 
-  <MontagesGallery v-if="montages.length > 0" :montagesThumnails="montages" />
-  <div class="center">
-    <button v-if="montages.length > 0" @click="addToCart()">Comprar</button>
-  </div>
+  <MontagesGallery v-if="Purchase.isMontageGenerated" />
 </template>
 
 <style scoped>
-.center {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 1rem;
-}
 .page-container {
   display: flex;
   justify-content: center;
