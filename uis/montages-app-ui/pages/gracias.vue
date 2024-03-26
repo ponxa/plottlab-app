@@ -1,5 +1,16 @@
 <script setup>
-// You can add your Vue 3 Composition API logic here
+import { usePurchase } from '../store/purchase';
+import { asDayMonthDate } from '../lib/utils';
+const Purchase = usePurchase(); // import the store
+
+const calculateDeliveryDate = () => {
+  const today = new Date();
+  const deliveryDate = new Date();
+  deliveryDate.setDate(
+    today.getDate() + Purchase.purchase.preCart.generatedMontages.pickUpDays
+  );
+  return asDayMonthDate(deliveryDate);
+};
 </script>
 
 <template>
@@ -10,6 +21,11 @@
       <p>
         Gracias por tu compra , te lo agradesemos mucho el equipo de Plottlab
         👾✨🎉🎊
+      </p>
+      <p>
+        Porfavor retirar su pedido a partir de el
+        <strong>{{ calculateDeliveryDate() }}</strong>
+        🚛🚚
       </p>
     </div>
   </article>
