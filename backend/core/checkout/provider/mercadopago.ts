@@ -60,7 +60,7 @@ function buildPreference(
 // Step 6: Make the request
 export async function createPaymentLink(snapshot: SnapShot) {
   const buildedPreferences = buildPreference(snapshot, {
-    externalReference: snapshot.sessionId,
+    externalReference: snapshot.snapId,
     successUrl: `localhost:3000/gracias`,
   });
   const response = await preference.create(buildedPreferences);
