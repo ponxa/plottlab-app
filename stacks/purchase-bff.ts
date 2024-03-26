@@ -72,14 +72,7 @@ export function PlottsPurchaseBffStack({ stack, app }: StackContext) {
           timeout: 30,
         },
       },
-      'POST /trpc/makeThumbnails/{proxy+}': {
-        function: {
-          handler:
-            'backend/functions/shopping-trpc/routers/makeThumbnails.handler',
-          timeout: 30,
-          layers: [use(PlottsAssetsStack).sharpLayer],
-        },
-      },
+
       'POST /trpc/addToPreCart/{proxy+}': {
         function: {
           handler:
@@ -106,6 +99,14 @@ export function PlottsPurchaseBffStack({ stack, app }: StackContext) {
         function: {
           handler:
             'backend/functions/shopping-trpc/routers/updateGeneratedMontages.handler',
+          timeout: 30,
+        },
+      },
+
+      'POST /trpc/removeGeneratedMontages/{proxy+}': {
+        function: {
+          handler:
+            'backend/functions/shopping-trpc/routers/removeGeneratedMontages.handler',
           timeout: 30,
         },
       },

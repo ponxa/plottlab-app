@@ -2,12 +2,9 @@
 import { asCurrency } from '../lib/utils';
 import { usePurchase } from '../store/purchase';
 import { asDayMonthDate, pixelsToMeters } from '../lib/utils';
+import { mdiChevronDoubleLeft } from '@mdi/js';
 
 const Purchase = usePurchase();
-const router = useRouter();
-async function addToCart() {
-  router.push('/checkout');
-}
 
 const calculateDeliveryDate = () => {
   const today = new Date();
@@ -21,12 +18,29 @@ const calculateDeliveryDate = () => {
 const rountToTwoDecimals = (num: number) => {
   return Math.round((num + Number.EPSILON) * 100) / 100;
 };
+
+const router = useRouter();
+const backToGallery = async () => {
+  const userConfirmation = window.confirm(
+    '¿Estás seguro de que quieres regresar? El montaje generado será eliminado.'
+  );
+  if (userConfirmation) {
+    await Purchase.removeGenerateMontages();
+    router.push('/');
+  }
+};
 </script>
 <template>
-  <header>
-    <h1>Galeria De Montages Generados</h1>
-    <p>Aquí están los montajes que has creado.</p>
-  </header>
+  <div class="header-custom">
+    <header>
+      <h1>Galeria De Montages Generados</h1>
+      <p>Aquí están los montajes que has creado.</p>
+    </header>
+    <button class="back-button" @click="backToGallery">
+      <MdiIcon :icon="mdiChevronDoubleLeft" /> Volver
+    </button>
+  </div>
+
   <article class="gallery">
     <div
       v-for="(image, index) in Purchase.purchase.preCart.generatedMontages
@@ -81,7 +95,7 @@ const rountToTwoDecimals = (num: number) => {
     </div>
   </article>
   <div class="center">
-    <button @click="addToCart()">
+    <button @click="$router.push('/checkout')">
       Agendar impresión por
       <strong>{{
         asCurrency(Purchase.purchase.preCart.generatedMontages.totalPrice)
@@ -123,5 +137,16 @@ const rountToTwoDecimals = (num: number) => {
 .small-custom {
   margin: 0;
   font-weight: 400;
+}
+
+.header-custom {
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.back-button {
+  height: max-content;
 }
 </style>

@@ -186,3 +186,18 @@ export const updateGeneratedMontages = async (
 
   return await update(session);
 };
+
+export const removeGeneratedMontages = async (sessionId: string) => {
+  const session = await db.get(sessionId);
+
+  session.preCart.generatedMontages = {
+    montagesUrls: [],
+    thumbnailsUrls: [],
+    totalPrice: 0,
+    totalMeters: 0,
+    pricePerMeter: 5000,
+    pickUpDays: 2,
+  };
+
+  return await update(session);
+};

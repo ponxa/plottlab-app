@@ -15,3 +15,5 @@ export const removeImg = PurchaseSession.removeImgFromPrecart;
 export const updateImgCopies = PurchaseSession.updateImgCopies;
 
 export const generatedMontages = PurchaseSession.updateGeneratedMontages;
+
+export const removeGeneratedMontages = PurchaseSession.removeGeneratedMontages;

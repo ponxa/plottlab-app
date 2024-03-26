@@ -29,6 +29,7 @@ export type ArrayElement<ArrType> =
   ArrType extends readonly (infer ElementType)[] ? ElementType : never;
 
 type TRPCApi = ReturnType<typeof makeClient>;
+
 export type TRPCOutput<Endpoint extends keyof TRPCApi> = Awaited<
   ReturnType<TRPCApi[Endpoint]>
 >;

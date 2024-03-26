@@ -10,11 +10,12 @@ export const endpoints = [
   'addToCart',
   'addCustomer',
   'geyPaymentLink',
-  'makeThumbnails',
+
   'addToPreCart',
   'removeImg',
   'updateImgCopies',
   'updateGeneratedMontages',
+  'removeGeneratedMontages',
   // ...otherRouters
 ] as const;
 // const apiUrl =

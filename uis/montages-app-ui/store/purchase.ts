@@ -43,18 +43,6 @@ export const usePurchase = defineStore('purchase', {
     initPurchaseSession(purchase: Purchase) {
       this.purchase = purchase;
     },
-    async addToCart(TotalMeters: number, TotalPrice: number) {
-      const Montages = useMontages();
-      const montages = Montages.montages;
-
-      const purchase = await useNuxtApp()
-        .$trpcAPI()
-        .addToCart({
-          cart: [{ montages, TotalMeters, TotalPrice }],
-        });
-
-      this.purchase = purchase;
-    },
 
     async addToPreCart(files: File[]) {
       const eventFiles = Array.from(files) as File[];
@@ -94,6 +82,11 @@ export const usePurchase = defineStore('purchase', {
       const purchase = await useNuxtApp()
         .$trpcAPI()
         .updateGeneratedMontages(montages);
+
+      this.purchase = purchase;
+    },
+    async removeGenerateMontages() {
+      const purchase = await useNuxtApp().$trpcAPI().removeGeneratedMontages();
 
       this.purchase = purchase;
     },

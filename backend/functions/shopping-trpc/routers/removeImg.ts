@@ -1,9 +1,7 @@
 import * as PurchaseSession from '@plottlab/backend/core/purchase/api';
 
 import { makeTRPCHandler, t } from '../factory';
-import { string, z } from 'zod';
-
-import { purchaseSessionSchema } from '@plottlab/backend/core/purchase/types/purchase-session';
+import { z } from 'zod';
 
 const schema = z.object({
   imageId: z.string(),

@@ -1,7 +1,6 @@
 import * as PurchaseSession from '@plottlab/backend/core/purchase/api';
 
 import { makeTRPCHandler, t } from '../factory';
-import { string, z } from 'zod';
 
 import { PlotterMontagesSchema } from '@plottlab/backend/core/assets/types/montages';
 
