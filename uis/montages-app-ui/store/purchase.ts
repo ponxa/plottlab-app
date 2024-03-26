@@ -90,5 +90,12 @@ export const usePurchase = defineStore('purchase', {
 
       this.purchase = purchase;
     },
+    async updateCustomer(customer) {
+      console.log('customerInfo', customer);
+      const purchase = await useNuxtApp().$trpcAPI().addCustomer(customer);
+      console.log('purchase', purchase);
+
+      this.purchase = purchase;
+    },
   },
 });

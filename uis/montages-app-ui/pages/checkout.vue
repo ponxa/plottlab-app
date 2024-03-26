@@ -12,11 +12,11 @@ async function getPaymentLink() {
 import { ref } from 'vue';
 
 const form = ref({
-  company: '',
-  firstName: '',
-  lastName: '',
-  email: '',
-  phone: '',
+  company: Purchase.purchase.customer.companyName || '',
+  firstName: Purchase.purchase.customer.firstName || '',
+  lastName: Purchase.purchase.customer.lastName || '',
+  email: Purchase.purchase.customer.email || '',
+  phone: Purchase.purchase.customer.phone || '',
 });
 
 const errors = ref({
@@ -31,22 +31,22 @@ function validateForm() {
   let isValid = true;
 
   if (!form.value.company) {
-    errors.value.company = 'Company name is required';
+    errors.value.company = 'Nombre de la empresa es requerido';
     isValid = false;
   }
 
   if (!form.value.firstName) {
-    errors.value.firstName = 'First name is required';
+    errors.value.firstName = 'Nombre es requerido';
     isValid = false;
   }
 
   if (!form.value.lastName) {
-    errors.value.lastName = 'Last name is required';
+    errors.value.lastName = 'Apellido es requerido';
     isValid = false;
   }
 
   if (!form.value.email) {
-    errors.value.email = 'Email is required';
+    errors.value.email = 'Email es requerido';
     isValid = false;
   } else if (!/\S+@\S+\.\S+/.test(form.value.email)) {
     errors.value.email = 'Email is invalid';
@@ -54,7 +54,7 @@ function validateForm() {
   }
 
   if (!form.value.phone) {
-    errors.value.phone = 'Phone number is required';
+    errors.value.phone = 'Número de teléfono es requerido';
     isValid = false;
   }
 
@@ -63,6 +63,13 @@ function validateForm() {
 
 async function handleFormSubmit() {
   if (validateForm()) {
+    await Purchase.updateCustomer({
+      companyName: form.value.company,
+      firstName: form.value.firstName,
+      lastName: form.value.lastName,
+      email: form.value.email,
+      phone: form.value.phone,
+    });
     await getPaymentLink();
   }
 }
@@ -74,54 +81,75 @@ async function handleFormSubmit() {
   <article>
     <form @submit.prevent="handleFormSubmit">
       <fieldset class="grid">
-        <input
-          v-model="form.company"
-          name="company"
-          placeholder="Nombre Empresa"
-          aria-label="Nombre Empresa"
-          autocomplete=""
-        />
-        <p v-if="errors.company">{{ errors.company }}</p>
+        <div class="input-container">
+          <input
+            v-model="form.company"
+            name="company"
+            placeholder="Nombre Empresa"
+            aria-label="Nombre Empresa"
+            autocomplete=""
+          />
+          <small class="invalid-text" v-if="errors.company"
+            >*{{ errors.company }}</small
+          >
+        </div>
       </fieldset>
       <small><strong>* Nombre y Apellido De Persona Que Retira</strong></small>
       <fieldset class="grid">
-        <input
-          v-model="form.firstName"
-          name="first-name"
-          placeholder="Nombre"
-          aria-label="Nombre"
-          autocomplete=""
-        />
-        <p v-if="errors.firstName">{{ errors.firstName }}</p>
-        <input
-          v-model="form.lastName"
-          type="last-name"
-          name="Apellido"
-          placeholder="Apellido"
-          aria-label="Apellido"
-          autocomplete=""
-        />
-        <p v-if="errors.lastName">{{ errors.lastName }}</p>
+        <div class="input-container">
+          <input
+            v-model="form.firstName"
+            name="first-name"
+            placeholder="Nombre"
+            aria-label="Nombre"
+            autocomplete=""
+          />
+          <small class="invalid-text" v-if="errors.firstName"
+            >*{{ errors.firstName }}</small
+          >
+        </div>
+        <div class="input-container">
+          <input
+            v-model="form.lastName"
+            type="last-name"
+            name="Apellido"
+            placeholder="Apellido"
+            aria-label="Apellido"
+            autocomplete=""
+          />
+          <small class="invalid-text" v-if="errors.lastName"
+            >*{{ errors.lastName }}</small
+          >
+        </div>
       </fieldset>
       <fieldset class="grid">
-        <input
-          v-model="form.email"
-          name="email"
-          placeholder="E-mail"
-          aria-label="E-mail"
-          autocomplete=""
-        />
-        <p v-if="errors.email">{{ errors.email }}</p>
-        <input
-          v-model="form.phone"
-          name="phone"
-          placeholder="Telefono"
-          aria-label="Telefono"
-          autocomplete=""
-        />
-        <p v-if="errors.phone">{{ errors.phone }}</p>
+        <div class="input-container">
+          <input
+            v-model="form.email"
+            name="email"
+            placeholder="E-mail"
+            aria-label="E-mail"
+            autocomplete=""
+          />
+          <small class="invalid-text" v-if="errors.email"
+            >*{{ errors.email }}</small
+          >
+        </div>
+
+        <div class="input-container">
+          <input
+            v-model="form.phone"
+            name="phone"
+            placeholder="Telefono"
+            aria-label="Telefono"
+            autocomplete=""
+          />
+          <small class="invalid-text" v-if="errors.phone"
+            >*{{ errors.phone }}</small
+          >
+        </div>
       </fieldset>
-      <button type="submit">
+      <button type="submit" :disabled="!validateForm">
         Pagar
         <strong>{{
           asCurrency(Purchase.purchase.preCart.generatedMontages.totalPrice)
@@ -130,3 +158,14 @@ async function handleFormSubmit() {
     </form>
   </article>
 </template>
+
+<style scoped>
+.input-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.invalid-text {
+  color: rgb(255, 64, 0);
+}
+</style>
