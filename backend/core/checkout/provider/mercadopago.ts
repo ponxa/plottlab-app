@@ -20,11 +20,9 @@ const payment = new Payment(client);
 const preference = new Preference(client);
 
 function buildItems(
-  cart: SnapShot['cart']
+  cart: SnapShot['preCart']
 ): Parameters<typeof preference.create>[0]['body']['items'] {
-  const cartsTotal = cart
-    .map((shop) => Math.max(shop.TotalPrice, 0))
-    .reduce((sum, curr) => sum + curr, 0);
+  const cartsTotal = cart.generatedMontages.totalPrice;
 
   const itemId = uuid();
 
@@ -34,7 +32,7 @@ function buildItems(
       title: 'Total productos',
       quantity: 1,
       currency_id: 'CLP',
-      unit_price: Math.floor(cartsTotal),
+      unit_price: cartsTotal,
     },
   ];
 }
@@ -45,9 +43,9 @@ function buildPreference(
 ): Parameters<typeof preference.create>[0] {
   return {
     body: {
-      items: buildItems(snapshot.cart),
+      items: buildItems(snapshot.preCart),
       //   shipments: buildShipments(snapshot.shops),
-      payer: { email: 'gonzalo.uson@usach.cl' },
+      payer: { email: snapshot.customer.email },
       external_reference: externalReference,
       back_urls: {
         success: successUrl,

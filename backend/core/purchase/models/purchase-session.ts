@@ -41,6 +41,13 @@ export const create = async (sessionId: string) => {
         pickUpDays: 2,
       },
     },
+    customer: {
+      companyName: undefined,
+      firstName: undefined,
+      lastName: undefined,
+      email: undefined,
+      phone: undefined,
+    },
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7).toISOString(), // 7 days
@@ -58,12 +65,7 @@ export const getOrCreate = async (sessionId: string) => {
   try {
     return await db.get(sessionId);
   } catch (error) {
-    console.log('Error getting new session', error);
-    try {
-      return await create(sessionId);
-    } catch (error) {
-      console.log('Error Creating new session', error);
-    }
+    return await create(sessionId);
   }
 };
 
@@ -105,6 +107,7 @@ export const updateCustomer = async (
   sessionId: string,
   customer: PurchaseSession['customer']
 ) => {
+  console.log('customer backend model', customer);
   const session = await db.get(sessionId);
   session.customer = customer;
   session.updatedAt = new Date().toISOString();
