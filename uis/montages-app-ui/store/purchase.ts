@@ -46,6 +46,16 @@ export const usePurchase = defineStore('purchase', {
 
     async addToPreCart(files: File[]) {
       const eventFiles = Array.from(files) as File[];
+      let temparaoryImages = this.purchase.preCart.thumbnailImagesForMontage;
+      for (let i = 0; i < eventFiles.length; i++) {
+        temparaoryImages.push({
+          isLoading: true,
+        });
+      }
+
+      this.purchase.preCart.thumbnailImagesForMontage = temparaoryImages;
+
+      this.purchase.preCart.thumbnailImagesForMontage = temparaoryImages;
 
       eventFiles.forEach(async (image) => {
         const filename = image?.name;
