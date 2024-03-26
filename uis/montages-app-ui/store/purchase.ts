@@ -49,14 +49,11 @@ export const usePurchase = defineStore('purchase', {
       let temparaoryImages = this.purchase.preCart.thumbnailImagesForMontage;
       for (let i = 0; i < eventFiles.length; i++) {
         temparaoryImages.push({
-          thumbnailUrl: 'https://placehold.jp/150x150.png',
           isLoading: true,
         });
       }
 
       this.purchase.preCart.thumbnailImagesForMontage = temparaoryImages;
-
-      console.log('temparaoryImages', temparaoryImages);
 
       this.purchase.preCart.thumbnailImagesForMontage = temparaoryImages;
 
