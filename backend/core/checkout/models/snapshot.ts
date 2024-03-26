@@ -46,19 +46,23 @@ export async function createPaymentLinkAndSaveSnapshot(snap: PurchaseSession) {
 }
 
 export async function markSnapShotAsPaid(snapId: string) {
-  const snap = await db.get({ snapId });
-  if (!snap) throw new Error('Snapshot not found');
+  try {
+    const snap = await db.get({ snapId });
+    if (!snap) throw new Error('Snapshot not found');
 
-  const input = {
-    Message: JSON.stringify(snap),
-    TopicArn: Topic.SnapShopPaidTopic.topicArn,
-  } as PublishCommandInput;
+    const input = {
+      Message: JSON.stringify(snap),
+      TopicArn: Topic.SnapShopPaidTopic.topicArn,
+    } as PublishCommandInput;
 
-  const command = new PublishCommand(input);
-  const response = await snsClient.send(command);
+    const command = new PublishCommand(input);
+    const response = await snsClient.send(command);
 
-  snap.status = 'completed';
+    snap.status = 'completed';
 
-  const order = await db.putUpdate(snap);
-  return order;
+    const order = await db.putUpdate(snap);
+    return order;
+  } catch (error) {
+    console.error('Error marking snapshot as paid', error);
+  }
 }
