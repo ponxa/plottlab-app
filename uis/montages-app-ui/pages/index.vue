@@ -70,8 +70,6 @@ async function pollMontageUrls(pollingUrl: string) {
   const { montageUrls } = await pollingLoop();
   return montageUrls;
 }
-
-const router = useRouter();
 </script>
 
 <template>
@@ -102,6 +100,7 @@ const router = useRouter();
           :imageId="image.id"
           :dimsInPx="image.dimsInPx"
           :dimsInCms="image.dimsInCms"
+          :isLoading="image.isLoading"
         />
       </div>
     </div>
@@ -148,13 +147,6 @@ const router = useRouter();
   height: 100%;
   object-fit: cover;
 }
-
-/* .remove-button {
-  position: absolute;
-  top: 0;
-  right: 0;
-} */
-
 .plott-button {
   margin-top: 1rem;
 }
