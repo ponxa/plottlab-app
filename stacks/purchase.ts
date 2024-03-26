@@ -15,10 +15,6 @@ export function PlottPurchaseStack({ stack, app }: StackContext) {
     'PLOTTLAB_SESSION_JWT_SECRET'
   );
 
-  // const PRICE_PER_METER = new Config.Parameter(stack, 'PRICE_PER_METER', {
-  //   value: '5000',
-  // });
-
   stack.setDefaultFunctionProps({
     environment: {
       TABLE_NAME: purchaseTable.tableName,

@@ -22,6 +22,8 @@ const tableName = Table.PurchaseTable.tableName;
 
 export const db = makeClient(tableName, indexes, purchaseSessionSchema.parse);
 
+const PRICE_PER_METER = 10;
+
 export const create = async (sessionId: string) => {
   const userId = uuid();
   const session: PurchaseSession = {
@@ -37,7 +39,7 @@ export const create = async (sessionId: string) => {
         thumbnailsUrls: [],
         totalPrice: 0,
         totalMeters: 0,
-        pricePerMeter: 5000,
+        pricePerMeter: PRICE_PER_METER,
         pickUpDays: 2,
       },
     },
@@ -198,7 +200,7 @@ export const removeGeneratedMontages = async (sessionId: string) => {
     thumbnailsUrls: [],
     totalPrice: 0,
     totalMeters: 0,
-    pricePerMeter: 5000,
+    pricePerMeter: PRICE_PER_METER,
     pickUpDays: 2,
   };
 

@@ -7,6 +7,7 @@ import { PlottsUploadsStack } from './stacks/uploads';
 import { PlottPurchaseStack } from './stacks/purchase';
 import { PlottlabCheckoutStack } from './stacks/checkout';
 import { PlottsOrdersStack } from './stacks/orders';
+import { PlottTopicsStack } from './stacks/topics';
 
 export default {
   config(input) {
@@ -46,6 +47,7 @@ export default {
       .stack(PlottPurchaseStack)
       .stack(PlottsOrdersStack)
       .stack(PlottlabCheckoutStack)
+      .stack(PlottTopicsStack)
       .stack(PlottsPurchaseBffStack);
   },
 } satisfies SSTConfig;

@@ -15,7 +15,7 @@ export function PlottlabCheckoutStack({ stack, app }: StackContext) {
     'PLOTTLAB_MERCADOPAGO_APP_ACCESS_TOKEN'
   );
 
-  const draftOrderPaidTopic = new Topic(stack, 'DRAFT_ORDER_PAID');
+  const snapShopPaidTopic = new Topic(stack, 'SNAP_ORDER_PAID');
 
   const checkoutApi = new Api(stack, 'CheckoutApi');
 
@@ -24,6 +24,7 @@ export function PlottlabCheckoutStack({ stack, app }: StackContext) {
       snapshotTable,
       mercadopagoSecrets,
       checkoutApi,
+      snapShopPaidTopic,
     },
   };
 
