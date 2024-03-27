@@ -11,12 +11,12 @@ defineProps({
     type: String,
   },
   dimsInPx: {
-    type: Object,
-    // default: () => ({width: 0, height: 0}),
+    type: Object as PropType<{ width: number; height: number }>,
+    default: () => ({ width: 0, height: 0 }),
   },
   dimsInCms: {
-    type: Object,
-    // default: () => ({width: 0, height: 0}),
+    type: Object as PropType<{ width: number; height: number }>,
+    default: () => ({ width: 0, height: 0 }),
   },
   isLoading: {
     type: Boolean,
@@ -36,10 +36,14 @@ const round = (num: number) => Math.round(num * 10) / 10;
     </div>
 
     <RemoveOrAddImgPill :copies="copies" :imageId="imageId" v-if="!isLoading" />
-    <small v-if="!isLoading">
-      {{ round(dimsInPx.width) }}px x {{ round(dimsInPx.height) }}px <br />
-      {{ round(dimsInCms.width) }}cm x {{ round(dimsInCms.height) }}cm
-    </small>
+    <div class="text-container">
+      <small v-if="!isLoading" class="custom-small">
+        {{ round(dimsInPx.width) }}px x {{ round(dimsInPx.height) }}px
+      </small>
+      <small v-if="!isLoading" class="custom-small">
+        {{ round(dimsInCms.width) }}cm x {{ round(dimsInCms.height) }}cm
+      </small>
+    </div>
   </article>
 </template>
 
@@ -48,6 +52,19 @@ const round = (num: number) => Math.round(num * 10) / 10;
   height: 250px;
   overflow: hidden;
   position: relative;
+}
+.custom-small {
+  font-size: 0.6rem;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+  font-weight: 600;
+}
+.text-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem;
 }
 
 .image-loader {

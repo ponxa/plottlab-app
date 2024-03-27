@@ -66,7 +66,7 @@ const backToGallery = async () => {
     <div class="description">
       <p>
         Precio total:
-        <strong>{{
+        <strong class="strong-custom">{{
           asCurrency(Purchase.purchase.preCart.generatedMontages.totalPrice)
         }}</strong>
         <br />
@@ -90,7 +90,7 @@ const backToGallery = async () => {
       </p>
       <p>
         Paga ahora y retira el
-        <strong style="font-weight: 500">{{ calculateDeliveryDate() }}</strong>
+        <strong>{{ calculateDeliveryDate() }}</strong>
       </p>
     </div>
   </article>
@@ -116,6 +116,9 @@ const backToGallery = async () => {
   display: flex;
   overflow-x: auto;
   justify-content: space-between;
+}
+.strong-custom {
+  color: red;
 }
 
 .image-container {

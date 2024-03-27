@@ -9,7 +9,7 @@ import { usePurchase } from '~/store/purchase';
 import type { Purchase } from '~/store/purchase';
 
 type Montages = TRPCOutput<'createMontages'>;
-type Images = TRPCOutput<'makeThumbnails'>;
+
 const Purchase = usePurchase();
 const Montages = useMontages();
 

@@ -61,8 +61,10 @@ function validateForm() {
   return isValid;
 }
 
+const loading = ref(false);
 async function handleFormSubmit() {
   if (validateForm()) {
+    loading.value = true;
     await Purchase.updateCustomer({
       companyName: form.value.company,
       firstName: form.value.firstName,
@@ -70,7 +72,9 @@ async function handleFormSubmit() {
       email: form.value.email,
       phone: form.value.phone,
     });
+
     await getPaymentLink();
+    loading.value = false;
   }
 }
 </script>
@@ -151,7 +155,8 @@ async function handleFormSubmit() {
       </fieldset>
       <button type="submit" :disabled="!validateForm">
         Pagar
-        <strong>{{
+        <i :aria-busy="loading" v-if="loading"></i>
+        <strong v-else>{{
           asCurrency(Purchase.purchase.preCart.generatedMontages.totalPrice)
         }}</strong>
       </button>
