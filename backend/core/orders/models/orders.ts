@@ -7,7 +7,7 @@ import { Orders, ordersSchema } from '../types/orders';
 // Indexes
 const indexes = {
   primary: {
-    pk: 'snapId',
+    pk: 'orderId',
   },
 } as const;
 
@@ -20,4 +20,8 @@ export const db = makeClient(tableName, indexes, ordersSchema.parse);
 
 export async function createOrder(order: Orders) {
   return await db.create(order);
+}
+
+export async function getAllOrders() {
+  return await db.scan();
 }

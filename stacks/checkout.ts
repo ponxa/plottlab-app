@@ -15,7 +15,7 @@ export function PlottlabCheckoutStack({ stack, app }: StackContext) {
     'PLOTTLAB_MERCADOPAGO_APP_ACCESS_TOKEN'
   );
 
-  const snapShopPaidTopic = new Topic(stack, 'SNAP_ORDER_PAID');
+  const snapShotPaidTopic = new Topic(stack, 'SNAP_SHOT_ORDER_PAID');
 
   const checkoutApi = new Api(stack, 'CheckoutApi');
 
@@ -24,7 +24,7 @@ export function PlottlabCheckoutStack({ stack, app }: StackContext) {
       snapshotTable,
       mercadopagoSecrets,
       checkoutApi,
-      snapShopPaidTopic,
+      snapShotPaidTopic,
     },
   };
 
@@ -36,21 +36,11 @@ export function PlottlabCheckoutStack({ stack, app }: StackContext) {
     ],
   });
 
-  snapShopPaidTopic.addSubscribers(stack, {
-    createOrders: {
-      function: {
-        handler: 'backend/functions/topics/SNAP_ORDER_PAID/createOrder.handler',
-        bind: [snapShopPaidTopic],
-      },
-    },
-  });
-
   checkoutApi.addRoutes(stack, {
     'POST   /hooks/mercadopago': {
       function: {
         handler: 'backend/functions/hooks/checkout/mercadopago.handler',
         timeout: 10,
-        bind: [snapShopPaidTopic],
       },
     },
   });

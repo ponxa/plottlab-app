@@ -18,15 +18,16 @@ async function paymentTopicHandler(paymentIdParam: string | undefined) {
   if (!draftId || !paymentStatus) return { statusCode: 400 };
 
   if (paymentStatus === 'approved') {
-    const { preCart } = await SnapShot.markSnapShotAsPaid(draftId);
-    const orderCreated = {
-      orderId: uuid(),
-      snapId: draftId,
-      snapCreatedAt: new Date().toISOString(),
-      preCart: { preCart },
-      status: 'paid' as 'completed' | 'paid' | 'picked',
-    };
-    await Orders.createOrder(orderCreated);
+    const order = await SnapShot.markSnapShotAsPaid(draftId);
+    if (!order) return { statusCode: 500 };
+    // const orderCreated = {
+    //   orderId: uuid(),
+    //   snapId: draftId,
+    //   snapCreatedAt: new Date().toISOString(),
+    //   preCart: { preCart },
+    //   status: 'paid' as 'completed' | 'paid' | 'picked',
+    // };
+    // await Orders.createOrder(orderCreated);
   }
 
   // TODO: Handle other statuses. Right now all statuses return 200

@@ -2,10 +2,12 @@ import { SSTConfig } from 'sst';
 
 import { PlottMontagesStack } from './stacks/montages';
 import { PlottsPurchaseBffStack } from './stacks/purchase-bff';
+import { PlottsCraftersBffStack } from './stacks/crafters-bff';
 import { PlottsAssetsStack } from './stacks/assets';
 import { PlottsUploadsStack } from './stacks/uploads';
 import { PlottPurchaseStack } from './stacks/purchase';
 import { PlottlabCheckoutStack } from './stacks/checkout';
+import { PlottLabTopicsStack } from './stacks/topics';
 import { PlottsOrdersStack } from './stacks/orders';
 
 export default {
@@ -46,6 +48,8 @@ export default {
       .stack(PlottPurchaseStack)
       .stack(PlottsOrdersStack)
       .stack(PlottlabCheckoutStack)
+      .stack(PlottLabTopicsStack)
+      .stack(PlottsCraftersBffStack)
       .stack(PlottsPurchaseBffStack);
   },
 } satisfies SSTConfig;
