@@ -36,11 +36,21 @@ export function PlottlabCheckoutStack({ stack, app }: StackContext) {
     ],
   });
 
+  snapShopPaidTopic.addSubscribers(stack, {
+    createOrders: {
+      function: {
+        handler: 'backend/functions/topics/SNAP_ORDER_PAID/createOrder.handler',
+        bind: [snapShopPaidTopic],
+      },
+    },
+  });
+
   checkoutApi.addRoutes(stack, {
     'POST   /hooks/mercadopago': {
       function: {
         handler: 'backend/functions/hooks/checkout/mercadopago.handler',
         timeout: 10,
+        bind: [snapShopPaidTopic],
       },
     },
   });

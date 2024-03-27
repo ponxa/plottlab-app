@@ -1,5 +1,3 @@
-import { v4 as uuid } from 'uuid';
-
 import { makeClient } from '@plottlab/dynamodb';
 import { Table } from 'sst/node/table';
 

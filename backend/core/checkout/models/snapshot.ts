@@ -50,13 +50,13 @@ export async function markSnapShotAsPaid(snapId: string) {
     const snap = await db.get({ snapId });
     if (!snap) throw new Error('Snapshot not found');
 
-    const input = {
-      Message: JSON.stringify(snap),
-      TopicArn: Topic.SnapShopPaidTopic.topicArn,
-    } as PublishCommandInput;
+    // const input = {
+    //   Message: JSON.stringify(snap),
+    //   TopicArn: Topic.SNAP_ORDER_PAID.topicArn,
+    // } as PublishCommandInput;
 
-    const command = new PublishCommand(input);
-    const response = await snsClient.send(command);
+    // const command = new PublishCommand(input);
+    // const response = await snsClient.send(command);
 
     snap.status = 'completed';
 

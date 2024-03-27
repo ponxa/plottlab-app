@@ -4,6 +4,9 @@ import type {
 } from 'aws-lambda';
 
 import * as SnapShot from '@plottlab/backend/core/checkout/api';
+import * as Orders from '@plottlab/backend/core/orders/api';
+
+import { v4 as uuid } from 'uuid';
 
 async function paymentTopicHandler(paymentIdParam: string | undefined) {
   const paymentId = parseInt(paymentIdParam ?? '');
@@ -14,7 +17,17 @@ async function paymentTopicHandler(paymentIdParam: string | undefined) {
 
   if (!draftId || !paymentStatus) return { statusCode: 400 };
 
-  if (paymentStatus === 'approved') await SnapShot.markSnapShotAsPaid(draftId);
+  if (paymentStatus === 'approved') {
+    const { preCart } = await SnapShot.markSnapShotAsPaid(draftId);
+    const orderCreated = {
+      orderId: uuid(),
+      snapId: draftId,
+      snapCreatedAt: new Date().toISOString(),
+      preCart: { preCart },
+      status: 'paid' as 'completed' | 'paid' | 'picked',
+    };
+    await Orders.createOrder(orderCreated);
+  }
 
   // TODO: Handle other statuses. Right now all statuses return 200
   return { statusCode: 200 };
