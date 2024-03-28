@@ -75,12 +75,10 @@ async function pollMontageUrls(pollingUrl: string) {
 <template>
   <article class="page-container" v-if="!Purchase.isMontageGenerated">
     <div class="container">
-      <h1 class="title">Plottlab Montages Creator</h1>
+      <h1 class="title">Agenda tus impresiones 😊</h1>
       <p class="description">
-        Bienvenido al Creador de Montajes de Plottlab. Esta aplicación te
-        permite subir tus imágenes y crear hermosos montajes. Una vez que tu
-        montaje esté listo, puedes mandarlo a plotear y te lo entregaremos en tu
-        puerta. ¡Comienza a crear tu montaje único ahora mismo!
+        Selecciona tus archivos a imprimir y define cantidad de copias. Presiona
+        el botón de cotizar para calcular el precio total.
       </p>
 
       <input

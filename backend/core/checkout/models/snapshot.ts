@@ -57,6 +57,7 @@ export async function markSnapShotAsPaid(snapId: string) {
 
     const command = new PublishCommand(input);
     const response = await snsClient.send(command);
+    console.log('Message sent', response);
 
     snap.status = 'completed';
 
