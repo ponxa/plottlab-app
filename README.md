@@ -39,3 +39,6 @@ Plottlab is a customizable plotting application built with Nuxt.js for the front
 
 ```bash
 npm install -g sst
+
+--bash
+sst start
